@@ -11,12 +11,10 @@ console.log("🌱 Database seeded.");
 
 async function seedEmployees() {
   for (let i = 0; i < 10; i++) {
-    console.log(
-      await createEmployee({
-        name: faker.person.fullName(),
-        birthday: faker.date.birthdate(),
-        salary: faker.number.int({ min: 40000, max: 200000 }),
-      }),
-    );
+    await createEmployee({
+      name: faker.person.fullName(),
+      birthday: faker.date.birthdate(),
+      salary: faker.number.int({ min: 40000, max: 200000 }),
+    });
   }
 }
