@@ -9,10 +9,9 @@ export async function createEmployee({ name, birthday, salary }) {
     ($1, $2, $3)
   RETURNING *
   `;
-  const values = [name, birthday, salary];
   const {
     rows: [employee],
-  } = await db.query(sql, values);
+  } = await db.query(sql, [name, birthday, salary]);
   return employee;
 }
 
@@ -33,7 +32,15 @@ export async function getEmployees() {
  * @returns undefined if employee with the given id does not exist
  */
 export async function getEmployee(id) {
-  // TODO
+  const sql = `
+  SELECT * 
+  FROM employees
+  WHERE id = $1
+  `;
+  const {
+    rows: [employee],
+  } = await db.query(sql, [id]);
+  return employee;
 }
 
 /**
