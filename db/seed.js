@@ -2,6 +2,8 @@ import db from "#db/client";
 import { createEmployee } from "#db/queries/employees";
 import { faker } from "@faker-js/faker";
 
+faker.seed(42); // Seed for consistant values
+
 await db.connect();
 await seedEmployees();
 await db.end();
