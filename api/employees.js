@@ -34,23 +34,21 @@ router.post("/", async (req, res) => {
   res.status(201).send(employee);
 });
 
+router.param("id", async (req, res, next, id) => {
+  const employee = await getEmployee(id);
+  if (!employee) return error404EmplyeeNotFound(res);
+  req.employee = employee;
+  next();
+});
+
 // get an employee by ID
 router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  const employee = await getEmployee(id);
-  if (!employee) {
-    return error404EmplyeeNotFound(res);
-  }
-  res.send(employee);
+  res.send(req.employee);
 });
 
 // delete an employee by ID
 router.delete("/:id", async (req, res) => {
-  const { id } = req.params;
-  const employee = await deleteEmployee(id);
-  if (!employee) {
-    return error404EmplyeeNotFound(res);
-  }
+  const employee = await deleteEmployee(req.employee.id);
   res.status(204).send(employee);
 });
 
@@ -60,10 +58,7 @@ router.put("/:id", async (req, res) => {
   const { name, birthday, salary } = req.body;
   if (!name || !birthday || !salary) return error400MissingRequiredField(res);
 
-  const { id } = req.params;
+  const id = req.employee.id;
   const employee = await updateEmployee({ id, name, birthday, salary });
-  if (!employee) {
-    return error404EmplyeeNotFound(res);
-  }
   res.send(employee);
 });
